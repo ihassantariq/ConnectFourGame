@@ -1,0 +1,80 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.convension.connectfour"
+    android:versionCode="1"
+    android:versionName="1.0">
+    <supports-screens android:resizeable="false"
+        android:smallScreens="false"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE"/>
+
+    <uses-sdk android:minSdkVersion="7" android:targetSdkVersion="24" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/icon"
+        android:theme="@style/AppTheme"
+        android:label="@string/app_name"
+        android:name=".Connect4App"
+        android:supportsRtl="true"
+        android:screenOrientation="portrait"
+        android:configChanges="keyboardHidden|orientation">
+        <meta-data android:name="com.google.android.gms.games.APP_ID"
+                   android:value="@string/app_id"/>
+        <meta-data android:name="com.google.android.gms.version"
+                   android:value="@integer/google_play_services_version"/>
+        <activity
+            android:name=".activity.MainMenuActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme"
+            android:screenOrientation="portrait"
+            android:configChanges="keyboardHidden|orientation">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <receiver
+                android:name=".ConnectivityReceiver"
+                android:enabled="true">
+                <intent-filter>
+                    <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+                </intent-filter>
+            </receiver>
+        </activity>
+        <activity
+            android:name=".activity.Connect4Activity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme"
+            android:screenOrientation="portrait"
+            android:configChanges="keyboardHidden|orientation">
+        </activity>
+        <activity
+            android:name=".activity.SettingsActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme"
+            android:screenOrientation="portrait"
+            android:configChanges="keyboardHidden|orientation">
+        </activity>
+
+        <activity
+            android:name=".activity.HelpActivity"
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.NoTitleBar"
+            android:screenOrientation="portrait"
+            android:configChanges="keyboardHidden|orientation">
+        </activity>
+        <activity
+            android:name=".activity.Connect4MultiplayerActivity"
+            android:label="@string/app_name"
+            android:allowBackup="false"
+            android:theme="@style/AppTheme"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="portrait">
+         <!-- <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>-->
+        </activity>
+    </application>
+
+</manifest>
