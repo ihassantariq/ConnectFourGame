@@ -36,7 +36,6 @@ public abstract class ABaseActivity extends Activity{
     		Intent intent = new Intent(this, HelpActivity.class);
             startActivity(intent);
             return true;
-    		// help
     	}
     	return true;
     }

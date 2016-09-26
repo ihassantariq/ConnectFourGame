@@ -265,12 +265,9 @@ public class GameViewMultiplayer extends FrameLayout implements View.OnTouchList
     private void computerGo(){
         debug("comp task "+board.getNumSpaces());
         APoint point=board.getBestPlay ();
-        //board.colFull (point.y);
-      //  if(!board.colFull (point.y)) {
-            mMessageSendListener.onRealTimeMessageSend (point.y,false);
-            processTask = new CompTask (point);
-            processTask.execute ();
-    //    }
+        mMessageSendListener.onRealTimeMessageSend (point.x,false);
+        processTask = new CompTask (point);
+        processTask.execute ();
     }
     public boolean cleanUp(){
         try{
@@ -639,7 +636,6 @@ public class GameViewMultiplayer extends FrameLayout implements View.OnTouchList
         }
         @Override
         protected APoint doInBackground(Void... v) {
-           // APoint c = board.getBestPlay();
             return c;
         }
         @Override

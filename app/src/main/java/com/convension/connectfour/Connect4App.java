@@ -36,6 +36,7 @@ public class Connect4App extends Application{
 
 	public void setConnectivityListener(ConnectivityReceiver.ConnectivityReceiverListener listener) {
 		ConnectivityReceiver.connectivityReceiverListener = listener;
+
 	}
 	
 }

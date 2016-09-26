@@ -19,7 +19,7 @@ import android.view.View.*;
 import android.widget.*;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 
-public class Connect4Activity extends ABaseActivity  implements ConnectivityReceiver.ConnectivityReceiverListener, IOnDebugListener,IOptionsListener,IOnExitListener, OnClickListener {
+public class Connect4Activity extends ABaseActivity  implements ConnectivityReceiver.ConnectivityReceiverListener , IOnDebugListener,IOptionsListener,IOnExitListener, OnClickListener {
 	
 	private TopView mtopView;
 	private GameView mGameView;
@@ -85,12 +85,9 @@ public class Connect4Activity extends ABaseActivity  implements ConnectivityRece
 		}else{
 			mAdView.setVisibility(View.GONE);
 		}
-	//	showSnack(isConnected);
 	}
 	@Override
 	public void onNetworkConnectionChanged(boolean isConnected) {
-	//	showSnack(isConnected);
-		checkConnection();
 	}
     private void startGame(){
     	SharedPreferences settings = getSharedPreferences(Connect4App.PREFS_NAME, 0);

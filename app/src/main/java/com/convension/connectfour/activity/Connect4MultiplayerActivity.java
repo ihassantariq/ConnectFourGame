@@ -27,7 +27,6 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.convension.connectfour.R;
@@ -37,7 +36,6 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.games.Games;
 import com.google.android.gms.games.GamesStatusCodes;
 import com.google.android.gms.games.GamesActivityResultCodes;
-import com.google.android.gms.games.Player;
 import com.google.android.gms.games.multiplayer.Invitation;
 import com.google.android.gms.games.multiplayer.Multiplayer;
 import com.google.android.gms.games.multiplayer.OnInvitationReceivedListener;
@@ -529,7 +527,6 @@ public class Connect4MultiplayerActivity extends ABaseActivity
     public void onLeftRoom(int statusCode, String roomId) {
         // we have left the room; return to main screen.
         Log.d(TAG, "onLeftRoom, code " + statusCode);
-      //  switchToMainScreen ();
         Players.resetAllSettings ();
         switchToMainScreen();
         Snackbar snackbar = Snackbar
@@ -537,14 +534,12 @@ public class Connect4MultiplayerActivity extends ABaseActivity
                 .setAction("Invite another", new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                      ///  switchToMainScreen ();
                         View invite=findViewById (R.id.button_invite_players);
                         Connect4MultiplayerActivity.this. onClick (invite);
                         Players.resetAllSettings ();
                     }
                 });
 
-// Changing message text color
         snackbar.setActionTextColor(Color.RED);
         snackbar.show();
     }
@@ -610,11 +605,29 @@ public class Connect4MultiplayerActivity extends ABaseActivity
     // etc.
     @Override
     public void onPeerDeclined(Room room, List<String> arg1) {
+        Snackbar snackbar = Snackbar
+                .make(findViewById (R.id.root_view), "You opponent just declined to match with you.!", Snackbar.LENGTH_LONG)
+                .setAction("Invite another", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        View invite=findViewById (R.id.button_invite_players);
+                        Connect4MultiplayerActivity.this. onClick (invite);
+                        Players.resetAllSettings ();
+                    }
+                });
+
+        snackbar.setActionTextColor(Color.RED);
+        snackbar.show();
         updateRoom(room);
     }
 
     @Override
     public void onPeerInvitedToRoom(Room room, List<String> arg1) {
+        Snackbar snackbar = Snackbar
+                .make(findViewById (R.id.root_view), "You just invited the player :)", Snackbar.LENGTH_LONG);
+
+        snackbar.setActionTextColor(Color.GREEN);
+        snackbar.show();
         updateRoom(room);
     }
 
@@ -633,7 +646,22 @@ public class Connect4MultiplayerActivity extends ABaseActivity
 
     @Override
     public void onPeerLeft(Room room, List<String> peersWhoLeft) {
+
+        Snackbar snackbar = Snackbar
+                .make(findViewById (R.id.root_view), "You opponent just left the room!", Snackbar.LENGTH_LONG)
+                .setAction("Invite another", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        View invite=findViewById (R.id.button_invite_players);
+                        Connect4MultiplayerActivity.this. onClick (invite);
+                        Players.resetAllSettings ();
+                    }
+                });
+
+        snackbar.setActionTextColor(Color.RED);
+        snackbar.show();
         updateRoom(room);
+
     }
 
     @Override
@@ -680,7 +708,6 @@ public class Connect4MultiplayerActivity extends ABaseActivity
         mScore = 0;
         mParticipantScore.clear();
         mFinishedParticipants.clear();
-       // mMultiplayerFragment
     }
 
     // Start the gameplay phase of the game.
@@ -791,8 +818,7 @@ public class Connect4MultiplayerActivity extends ABaseActivity
     final static int[] CLICKABLES = {
             R.id.button_accept_popup_invitation, R.id.button_invite_players,
             R.id.button_quick_game, R.id.button_see_invitations, R.id.button_sign_in,
-            R.id.button_sign_out,/* R.id.button_click_me, R.id.button_single_player,
-            R.id.button_single_player_2*/
+            R.id.button_sign_out,
     };
 
     // This array lists all the individual screens our game has.
@@ -833,19 +859,10 @@ public class Connect4MultiplayerActivity extends ABaseActivity
         }
     }
 
-   /* // updates the label that shows my score
-    void updateScoreDisplay() {
-        ((TextView) findViewById(R.id.my_score)).setText(formatScore(mScore));
-    }*/
-
     // formats a score as a three-digit number
 
     // updates the screen with the scores from our peers
     void updatePeerScoresDisplay() {
-  /*      ((TextView) findViewById(R.id.score0)).setText(formatScore(mScore) + " - Me");
-        int[] arr = {
-                R.id.score1, R.id.score2, R.id.score3
-        };*/
         int i = 0;
 
         if (mRoomId != null) {
@@ -856,15 +873,10 @@ public class Connect4MultiplayerActivity extends ABaseActivity
                 if (p.getStatus() != Participant.STATUS_JOINED)
                     continue;
                 int score = mParticipantScore.containsKey(pid) ? mParticipantScore.get(pid) : 0;
-                /*((TextView) findViewById(arr[i])).setText(formatScore(score) + " - " +
-                        p.getDisplayName());*/
+
                 ++i;
             }
         }
-
-      /*  for (; i < arr.length; ++i) {
-            ((TextView) findViewById(arr[i])).setText("");
-        }*/
     }
 
     /*
@@ -916,27 +928,32 @@ public class Connect4MultiplayerActivity extends ABaseActivity
         return true;
     }
     private void setParticipantsName() {
-        for ( int i=0;i< mParticipants.size ();i++ ) {
+        Players.IS_SERVER = false;
+        Players.INDEX=0;
+       // for ( int i=0;i< mParticipants.size ();i++ ) {
             if ( isServer () ) {
-              //  Players.FIRST_PLAYER = mParticipants.get (i).getDisplayName ();
                 Players.IS_SERVER = true;
-                Players.INDEX = i;
-                break;
+              //  break;
             }else{
-         //       Players.SECOND_PLAYER = mParticipants.get (i).getDisplayName ();
                 Players.IS_SERVER = false;
-                Players.INDEX = i;
-                break;
             }
+       // }
+        for ( int i=0;i< mParticipants.size ();i++ ) {
+           if(mParticipants.get(i).getParticipantId().equals(mMyId)){
+               Players.INDEX=i;
+           }
         }
         for ( int i=0;i< mParticipants.size ();i++ ) {
             if(!Players.IS_SERVER && Players.INDEX==i ){
                 Players.SECOND_PLAYER=mParticipants.get (i).getDisplayName ();
-            }else if(Players.IS_SERVER && Players.INDEX==i  )  {
+            }
+            if(Players.IS_SERVER && Players.INDEX==i  )  {
                 Players.FIRST_PLAYER=mParticipants.get (i).getDisplayName ();
-            }else if( !Players.IS_SERVER && !(Players.INDEX==i)){
+            }
+            if( !Players.IS_SERVER && !(Players.INDEX==i)){
                 Players.FIRST_PLAYER=mParticipants.get (i).getDisplayName ();
-            }else if(Players.IS_SERVER && !(Players.INDEX==i)){
+            }
+            if(Players.IS_SERVER && !(Players.INDEX==i)){
                 Players.SECOND_PLAYER=mParticipants.get (i).getDisplayName ();
             }
         }
