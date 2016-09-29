@@ -36,11 +36,9 @@ public class Connect4Activity extends ABaseActivity  implements ConnectivityRece
     	this.debug("CREATE");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-		MobileAds.initialize(getApplicationContext(), "ca-app-pub-7121786372713423~6288731794");
 		mAdView = (AdView) findViewById(R.id.adView);
 		AdRequest adRequest = new AdRequest.Builder().
-		addTestDevice(AdRequest.DEVICE_ID_EMULATOR).
-		addTestDevice("8694B74A7E9D4A9F1F47DF2F11B51CBC").build();
+		addTestDevice(AdRequest.DEVICE_ID_EMULATOR).build ();
 		mAdView.loadAd(adRequest);
 		checkConnection();
         try {

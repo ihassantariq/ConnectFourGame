@@ -37,7 +37,7 @@ public class ConnectFourFragment extends Fragment implements IOnDebugListener,IO
     private GameViewMultiplayer mGameView;
   //  private BottomView mBottomView;
     private TextView mDecorView;
-    private Button mPowerButton;
+   // private Button mPowerButton;
     private boolean mCompInterrupted = false;
     private View mRootView;
 
@@ -92,7 +92,7 @@ public class ConnectFourFragment extends Fragment implements IOnDebugListener,IO
         if(!Connect4App.DEBUG){
             mDecorView.setVisibility(View.GONE);
         }
-        mPowerButton = (Button)(mRootView.findViewById(R.id.powerbutton));
+      //  mPowerButton = (Button)(mRootView.findViewById(R.id.powerbutton));
         addListeners();
         startGame();
 
@@ -171,10 +171,10 @@ public class ConnectFourFragment extends Fragment implements IOnDebugListener,IO
             }
         });
         if(Connect4App.DEBUG){
-            mPowerButton.setOnClickListener(this);
+         //   mPowerButton.setOnClickListener(this);
         }
         else{
-            mPowerButton.setVisibility(View.INVISIBLE);
+          //  mPowerButton.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -222,7 +222,7 @@ public class ConnectFourFragment extends Fragment implements IOnDebugListener,IO
     }
     @Override
     public void onClick(View v) {
-        mGameView.powerPressed();
+        //mGameView.powerPressed();
     }
     public void onMessageReceived(int colNum,Boolean isFinal) {
         mGameView.onMessageReceived(colNum,isFinal);

@@ -33,7 +33,6 @@ public class GameViewMultiplayer extends FrameLayout implements View.OnTouchList
     private IOnDebugListener dList;
     private IOnExitListener exList;
     private IOnTurnChangeListener turnList;
-    private IOnBottomListener bottomList;
     private GameBoard gameBoard = new GameBoard();
     private Resources res;
     private int columnPlayed;
@@ -46,7 +45,6 @@ public class GameViewMultiplayer extends FrameLayout implements View.OnTouchList
     private CompTask processTask;
     private boolean boardEnabled;
     private PowerBall powerBall = new PowerBall();
-    private boolean powerPressed;
     private boolean mActivateBoard;
     private CountDownTimer mTimer;
 
@@ -81,9 +79,6 @@ public class GameViewMultiplayer extends FrameLayout implements View.OnTouchList
     public void setOnTurnChangeListener(IOnTurnChangeListener list){
         turnList = list;
     }
-    public void setOnBottomListener(IOnBottomListener list){
-        bottomList = list;
-    }
     public void setOnExitListener(IOnExitListener list){
         exList = list;
     }
@@ -95,32 +90,18 @@ public class GameViewMultiplayer extends FrameLayout implements View.OnTouchList
             return R.layout.secondpiece;
         }
     }
-    private int getPowerId(){
-        return R.layout.powerpiece;
-    }
     private void addPiece(int i){
         boolean p = powerBall.playNow();
-        if(powerPressed){
-            p = true;
-        }
         MarginLayoutParams mp = new MarginLayoutParams(gameBoard.getPieceDiam(),gameBoard.getPieceDiam());
-        if(p){
-            newPiece = lInf.inflate(getPowerId(), null);
-        }
-        else{
-            newPiece = lInf.inflate(getPieceId(), null);
-        }
+
+        newPiece = lInf.inflate(getPieceId(), null);
         mp.leftMargin  =  gameBoard.getX(i);
         mp.topMargin =    gameBoard.getY(0);
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(mp);
         //ViewGroup viewGroup=(ViewGroup)newPiece;
         ImageView imageView= (ImageView )newPiece;
         int id=0;
-        if(!powerPressed) {
-            id = getPieceId ();
-        }else{
-            id=getPowerId ();
-        }
+         id = getPieceId ();
         Util.setImageViewDrawable (imageView,id,getContext ());
         piecesFrame.addView(newPiece, params);
         if(p){
@@ -149,33 +130,19 @@ public class GameViewMultiplayer extends FrameLayout implements View.OnTouchList
         whoWon = Players.NONE;
         board.reset();
         int p = settings.getInt(Connect4App.PREFS_PLAY, Players.ONE_PLAYER);
-        int t = settings.getInt(Connect4App.PREFS_TURN, Players.GO_FIRST);
         powerBall.setInUse(  (settings.getInt(Connect4App.PREFS_POWER, Players.POWER_OFF) == Players.POWER_ON)  );
         this.setNumPlayers(1);
         this.debug("");
         changeTop();
         powerBall.reset();
-        this.powerPressed = false;
         moveStack.clear();
         this.enableBoard(true);
-        enableBottomButtons(true);
         if(piecesFrame!=null){
             piecesFrame.removeAllViews();
         }
         if(winLinesFrame!=null){
             winLinesFrame.reset();
         }
-        if(p==Players.ONE_PLAYER && t==Players.GO_SECOND ){
-            computerPlaysFirst();
-        }
-    }
-    private void computerPlaysFirst(){
-        this.enableBoard(false);
-        enableBottomButtons(false);
-        board.alternateTurn();
-        changeTop();
-        processTask = new CompTask(board.getBestPlay ());
-        processTask.execute();
     }
     private void initBoard(){
         FrameLayout f = (FrameLayout)(this.findViewById (R.id.main_layout));
@@ -199,9 +166,6 @@ public class GameViewMultiplayer extends FrameLayout implements View.OnTouchList
                 int colNum = gameBoard.getColForTouch (xPos);
                 if ( !board.colFull (colNum) ) {
                     enableBoard (false);
-                    if ( numPlayers == Players.ONE_PLAYER ) {
-                        enableBottomButtons (false);
-                    }
                     addPiece (colNum);
                     columnPlayed = colNum;
                     move ();
@@ -284,10 +248,6 @@ public class GameViewMultiplayer extends FrameLayout implements View.OnTouchList
     }*/
     //drop function is basically doing everything from dropping to the next player action and setting the alternative
     private void dropped(){
-
-        if(numPlayers==Players.ONE_PLAYER && board.getPlayersGo()==Players.PLAYER2){
-            enableBottomButtons(true);
-        }
         int numSteps = board.getStepsDown(columnPlayed);
         board.pushCol(columnPlayed, powerBall.getJustPlayed());
         moveStack.add(new Point(columnPlayed, numSteps));
@@ -350,11 +310,6 @@ public class GameViewMultiplayer extends FrameLayout implements View.OnTouchList
             turnList.onChange(this, board.getPlayersGo());
         }
     }
-    private void enableBottomButtons(boolean tf){
-        if(bottomList!=null){
-            bottomList.onChangeBottom(this, tf);
-        }
-    }
     public void onWinFinished(){
         String s;
         if(numPlayers==Players.TWO_PLAYERS){
@@ -407,7 +362,6 @@ public class GameViewMultiplayer extends FrameLayout implements View.OnTouchList
         else{
             playFailSound();
         }
-        this.enableBottomButtons(false);
         APoint[][] line = {{won0[0], won1[0]}, {won0[1], won1[1]}, {won0[2], won1[2]}, {won0[3], won1[3]}};
         winLinesFrame.draw(convertToXY(line));
     }
@@ -418,7 +372,6 @@ public class GameViewMultiplayer extends FrameLayout implements View.OnTouchList
         else{
             playFailSound();
         }
-        this.enableBottomButtons(false);
         APoint[][] line = {{won[0]}, {won[1]}, {won[2]}, {won[3]}};
         winLinesFrame.draw(convertToXY(line));
     }
@@ -521,73 +474,6 @@ public class GameViewMultiplayer extends FrameLayout implements View.OnTouchList
     private void exitGame(){
         exList.exit();
     }
-    private void undoTwice(){
-        if(moveStack.size()<=1){
-            return;
-        }
-        Point lastMove = moveStack.pop();
-        Point prevMove = moveStack.pop();
-        board.popCol(lastMove.x);
-        board.popCol(prevMove.x);
-        piecesFrame.removeViewAt(piecesFrame.getChildCount()-1);
-        piecesFrame.removeViewAt(piecesFrame.getChildCount()-1);
-    }
-    private void undoOnce(){
-        if(moveStack.size()<1){
-            return;
-        }
-        Point lastMove = moveStack.pop();
-        board.popCol(lastMove.x);
-        piecesFrame.removeViewAt(piecesFrame.getChildCount()-1);
-    }
-    private void undo(){
-        this.powerPressed = false;
-        debug("undo "+numPlayers+" "+whoWon+" "+board.getPlayersGo());
-        if(numPlayers==Players.ONE_PLAYER){
-            if(whoWon==Players.POWER_PLAYER){
-                // both won - two winning lines using powerball
-                if(board.getPlayersGo()==Players.PLAYER2){
-                    // comp go (you just played powerball)
-                    undoOnce();
-                }
-                else{
-                    // your go (comp just played powerball)
-                    undoTwice();
-                }
-            }
-            else if(whoWon == Players.PLAYER1 && board.getPlayersGo() == Players.PLAYER1){
-                // you won and it's now your go  - comp played powerball for you
-                undoTwice();
-            }
-            else if(whoWon == Players.PLAYER1 && board.getPlayersGo() == Players.PLAYER2){
-                // you won and it's now computers go - you won normally
-                undoOnce();
-            }
-            else if(whoWon == Players.PLAYER2 && board.getPlayersGo() == Players.PLAYER1){
-                // computer won and it's now your go - comp won normally
-                undoTwice();
-            }
-            else if(whoWon == Players.PLAYER2 && board.getPlayersGo() == Players.PLAYER2){
-                // computer won and it's now the computers go - you played the powerball for him
-                undoOnce();
-            }
-            else{
-                // noone won, just undo
-                undoTwice();
-            }
-        }
-        else{
-            if(board.getPlayersGo()==whoWon){
-                undoOnce();
-            }
-            else{
-                undoTwice();
-            }
-        }
-        this.changeTop();
-        this.enableBoard(true);
-        whoWon = Players.NONE;
-    }
     @Override
     public boolean onNewGame(View v) {
         final boolean wasEnabled = this.getBoardEnabled();
@@ -617,7 +503,7 @@ public class GameViewMultiplayer extends FrameLayout implements View.OnTouchList
     }
     @Override
     public boolean onUndo(View v) {
-        undo();
+        //undo();
         return false;
     }
 
@@ -669,9 +555,6 @@ public class GameViewMultiplayer extends FrameLayout implements View.OnTouchList
             drawGrid(c);
         }
 
-    }
-    public void powerPressed() {
-        powerPressed = true;
     }
     public void setmMessageSendListener (IGameViewListener mMessageSendListener) {
         this.mMessageSendListener = mMessageSendListener;

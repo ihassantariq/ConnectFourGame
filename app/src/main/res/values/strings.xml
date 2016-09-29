@@ -33,7 +33,10 @@
     <string name="click_me">Click me!</string>
     <string name="is_inviting_you">is challenging you to a game!</string>
     <string name="signin_other_error">There was an issue with sign in. Please try again later.</string>
+    <string name="add_app_id">ca-app-pub-7121786372713423~6288731794</string>
     <string name="banner_ad_unit_id">ca-app-pub-7121786372713423/6149130999</string>
+    <string name="banner_ad_unit_id_main_Page">ca-app-pub-7121786372713423/5887472194</string>
+    <string name="banner_ad_unit_id_multiplayer_main_Page">ca-app-pub-7121786372713423/8840938597</string>
    
     
 </resources>

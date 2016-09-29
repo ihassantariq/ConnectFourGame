@@ -31,6 +31,8 @@ import android.widget.TextView;
 
 import com.convension.connectfour.R;
 import com.convension.connectfour.inter.IGameViewListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.games.Games;
@@ -129,6 +131,7 @@ public class Connect4MultiplayerActivity extends ABaseActivity
 
     // Message buffer for sending messages
     byte[] mMsgBuf = new byte[2];
+    public AdView mAdView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -142,6 +145,10 @@ public class Connect4MultiplayerActivity extends ABaseActivity
         .addOnConnectionFailedListener(this)
         .addApi(Games.API).addScope(Games.SCOPE_GAMES)
         .build();
+        mAdView = (AdView ) findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().
+                addTestDevice(AdRequest.DEVICE_ID_EMULATOR).build ();
+        mAdView.loadAd(adRequest);
 
     // set up a click listener for everything we care about
     for (int id : CLICKABLES) {
@@ -715,7 +722,6 @@ public class Connect4MultiplayerActivity extends ABaseActivity
 
         setParticipantsName();
         mMultiplayer = multiplayer;
-        switchToScreen(R.id.screen_game);
         mMultiplayerFragment=new ConnectFourFragment ();
         mMultiplayerFragment.setmMessageSendListener (this);
         Fragment fr = mMultiplayerFragment;
@@ -723,6 +729,7 @@ public class Connect4MultiplayerActivity extends ABaseActivity
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
         fragmentTransaction.replace(R.id.screen_game, fr);
         fragmentTransaction.commit();
+        switchToScreen(R.id.screen_game);
 
     }
 
@@ -781,12 +788,12 @@ public class Connect4MultiplayerActivity extends ABaseActivity
     }
 
     // Broadcast my score to everybody else.
-    void broadcastScore(int colnum , boolean finalScore) {
+    void broadcastScore(int colnum , boolean finalMessage) {
         if (!mMultiplayer)
             return; // playing single-player mode
 
         // First byte in message indicates whether it's a final score or not
-        mMsgBuf[0] = (byte) (finalScore ? 'F' : 'U');
+        mMsgBuf[0] = (byte) (finalMessage ? 'F' : 'U');
 
         // Second byte is the score.
         mMsgBuf[1] = (byte) colnum;
@@ -797,15 +804,9 @@ public class Connect4MultiplayerActivity extends ABaseActivity
                 continue;
             if (p.getStatus() != Participant.STATUS_JOINED)
                 continue;
-            if (finalScore) {
                 // final score notification must be sent via reliable message
                 Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, mMsgBuf,
                         mRoomId, p.getParticipantId());
-            } else {
-                // it's an interim score notification, so we can use unreliable
-                Games.RealTimeMultiplayer.sendUnreliableMessage(mGoogleApiClient, mMsgBuf, mRoomId,
-                        p.getParticipantId());
-            }
         }
     }
 
@@ -930,14 +931,11 @@ public class Connect4MultiplayerActivity extends ABaseActivity
     private void setParticipantsName() {
         Players.IS_SERVER = false;
         Players.INDEX=0;
-       // for ( int i=0;i< mParticipants.size ();i++ ) {
             if ( isServer () ) {
                 Players.IS_SERVER = true;
-              //  break;
             }else{
                 Players.IS_SERVER = false;
             }
-       // }
         for ( int i=0;i< mParticipants.size ();i++ ) {
            if(mParticipants.get(i).getParticipantId().equals(mMyId)){
                Players.INDEX=i;

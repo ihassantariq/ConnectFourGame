@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.SharedPreferences;
 
 import com.convension.connectfour.utils.ConnectivityReceiver;
+import com.google.android.gms.ads.MobileAds;
 import com.jgrindall.android.connect4.lib.board.Players;
 
 public class Connect4App extends Application{
@@ -26,6 +27,7 @@ public class Connect4App extends Application{
 	@Override
 	public void onCreate() {
 		super.onCreate();
+		MobileAds.initialize(getApplicationContext(), getString (R.string.add_app_id));
 
 		mInstance = this;
 	}

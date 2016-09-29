@@ -2,6 +2,8 @@ package com.convension.connectfour.activity;
 
 import  com.convension.connectfour.Connect4App;
 import  com.convension.connectfour.R;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.jgrindall.android.connect4.lib.board.Players;
 
 import android.content.Context;
@@ -26,12 +28,16 @@ public class MainMenuActivity extends ABaseActivity implements View.OnClickListe
 	private RadioButton turn0,turn1;
 	private RadioGroup powerGroup;
 	private RadioButton power0,power1;
+	public AdView mAdView;
 	
 	 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.mainmenu);
+		mAdView = (AdView ) findViewById(R.id.adView);
+		AdRequest adRequest = new AdRequest.Builder().addTestDevice(AdRequest.DEVICE_ID_EMULATOR).build ();
+		mAdView.loadAd(adRequest);
         init();
         load();
     }
@@ -153,12 +159,16 @@ public class MainMenuActivity extends ABaseActivity implements View.OnClickListe
     	super.onStart();
     }
     public void onResume(){
-    	super.onResume();
+
+		super.onResume();
+		mAdView.resume();
     }
     public void onSaveInstanceState(Bundle outState){
     	super.onSaveInstanceState(outState);
     }
-    public void onPause(){
+    public void onPause()
+	{
+		mAdView.pause();
     	super.onPause();
     }
     public void onStop(){
