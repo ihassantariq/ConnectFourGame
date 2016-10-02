@@ -20,11 +20,10 @@ import com.convension.connectfour.inter.IGameViewListener;
 import com.convension.connectfour.inter.IOnDebugListener;
 import com.convension.connectfour.inter.IOnExitListener;
 import com.convension.connectfour.inter.IOptionsListener;
-import com.convension.connectfour.views.BottomView;
 import com.convension.connectfour.views.GameViewMultiplayer;
 import com.convension.connectfour.views.TopView;
-import com.jgrindall.android.connect4.lib.algorithm.AlgorithmConsts;
-import com.jgrindall.android.connect4.lib.board.Players;
+import com.convension.connectfour.algorithm.AlgorithmConsts;
+import com.convension.connectfour.board.Players;
 
 /**
  * Created by umerfarooq on 21/08/2016.
@@ -87,12 +86,10 @@ public class ConnectFourFragment extends Fragment implements IOnDebugListener,IO
     private void init(){
         mtopView = (TopView)mRootView.findViewById(R.id.topview);
         mGameView = (GameViewMultiplayer ) mRootView.findViewById(R.id.gameview);
-      //  mBottomView = (BottomView)mRootView.findViewById(R.id.bottomview);
         mDecorView = (TextView)mRootView.findViewById(R.id.debugtext);
         if(!Connect4App.DEBUG){
             mDecorView.setVisibility(View.GONE);
         }
-      //  mPowerButton = (Button)(mRootView.findViewById(R.id.powerbutton));
         addListeners();
         startGame();
 
@@ -101,7 +98,6 @@ public class ConnectFourFragment extends Fragment implements IOnDebugListener,IO
         SharedPreferences settings = getActivity ().getSharedPreferences(Connect4App.PREFS_NAME, 0);
         int d = settings.getInt(Connect4App.PREFS_DIFF, Players.DIFF_EASY);
 
-       // int p = settings.getInt(Connect4App.PREFS_PLAY, Players.ONE_PLAYER);
         mGameView.setDepth(AlgorithmConsts.getDefaultDepth());
         mGameView.setDifficulty(d);
         mGameView.setOnExitListener(this);
@@ -171,7 +167,6 @@ public class ConnectFourFragment extends Fragment implements IOnDebugListener,IO
             }
         });
         if(Connect4App.DEBUG){
-         //   mPowerButton.setOnClickListener(this);
         }
         else{
           //  mPowerButton.setVisibility(View.INVISIBLE);
@@ -244,4 +239,5 @@ public class ConnectFourFragment extends Fragment implements IOnDebugListener,IO
         editor.putInt (Connect4App.PREFS_THEME,Players.THEME_DEFAULT);
         editor.commit();
     }
+
 }

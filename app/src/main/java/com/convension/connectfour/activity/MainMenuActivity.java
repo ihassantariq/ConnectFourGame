@@ -1,10 +1,10 @@
 package com.convension.connectfour.activity;
 
-import  com.convension.connectfour.Connect4App;
-import  com.convension.connectfour.R;
+import com.convension.connectfour.Connect4App;
+import com.convension.connectfour.R;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
-import com.jgrindall.android.connect4.lib.board.Players;
+import com.convension.connectfour.board.Players;
 
 import android.content.Context;
 import android.content.Intent;
@@ -36,7 +36,8 @@ public class MainMenuActivity extends ABaseActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.mainmenu);
 		mAdView = (AdView ) findViewById(R.id.adView);
-		AdRequest adRequest = new AdRequest.Builder().addTestDevice(AdRequest.DEVICE_ID_EMULATOR).build ();
+		AdRequest adRequest = new AdRequest.Builder().
+				addTestDevice(AdRequest.DEVICE_ID_EMULATOR).build ();
 		mAdView.loadAd(adRequest);
         init();
         load();

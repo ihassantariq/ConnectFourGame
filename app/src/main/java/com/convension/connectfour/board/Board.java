@@ -1,6 +1,6 @@
-package com.jgrindall.android.connect4.lib.board;
+package com.convension.connectfour.board;
 
-import com.jgrindall.android.connect4.lib.algorithm.Minimax;
+import com.convension.connectfour.algorithm.Minimax;
 
 public class Board
   extends AConnect4Board

@@ -2,7 +2,7 @@ package com.convension.connectfour.activity;
 
 import  com.convension.connectfour.Connect4App;
 import  com.convension.connectfour.R;
-import com.jgrindall.android.connect4.lib.board.*;
+import com.convension.connectfour.board.*;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;

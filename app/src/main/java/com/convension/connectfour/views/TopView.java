@@ -3,7 +3,7 @@ package com.convension.connectfour.views;
 import  com.convension.connectfour.R;
 import  com.convension.connectfour.inter.*;
 import com.convension.connectfour.utils.Util;
-import com.jgrindall.android.connect4.lib.board.*;
+import com.convension.connectfour.board.*;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Canvas;
@@ -88,7 +88,7 @@ public class TopView extends RelativeLayout implements IOnTurnChangeListener{
 		}
 		//Server Player
 		if(Players.IS_MULTIPLAYER_SERVER) {
-			if(Players.IS_SERVER) {
+			//if(Players.IS_SERVER) {
 				if(Players.FIRST_PLAYER.length ()>15) {
 					t1.setText (Players.FIRST_PLAYER.substring (0,14)+"..");
 				}else{
@@ -99,18 +99,18 @@ public class TopView extends RelativeLayout implements IOnTurnChangeListener{
 				}else{
 					t2.setText (Players.SECOND_PLAYER);
 				}
-			}else{
-				if(Players.FIRST_PLAYER.length ()>15) {
-					t2.setText (Players.FIRST_PLAYER.substring (0,14)+"..");
-				}else{
-					t2.setText (Players.FIRST_PLAYER);
-				}
-				if(Players.SECOND_PLAYER.length ()>15) {
-					t1.setText (Players.SECOND_PLAYER.substring (0,14)+"..");
-				}else{
-					t1.setText (Players.SECOND_PLAYER);
-				}
-			}
+//			}else{
+//				if(Players.FIRST_PLAYER.length ()>15) {
+//					t2.setText (Players.FIRST_PLAYER.substring (0,14)+"..");
+//				}else{
+//					t2.setText (Players.FIRST_PLAYER);
+//				}
+//				if(Players.SECOND_PLAYER.length ()>15) {
+//					t1.setText (Players.SECOND_PLAYER.substring (0,14)+"..");
+//				}else{
+//					t1.setText (Players.SECOND_PLAYER);
+//				}
+//			}
 		}
 	}
 	@Override

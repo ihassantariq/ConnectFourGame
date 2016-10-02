@@ -47,7 +47,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="top|center_horizontal"
             ads:adSize="BANNER"
-            ads:adUnitId="@string/banner_ad_unit_id_multiplayer_main_Page"/>
+            ads:adUnitId="@string/banner_ad_unit_id_main_Page"/>
     <!-- SIGN-IN SCREEN -->
     <LinearLayout android:id="@+id/screen_sign_in" style="@style/LLScreen">
         <com.google.android.gms.common.SignInButton

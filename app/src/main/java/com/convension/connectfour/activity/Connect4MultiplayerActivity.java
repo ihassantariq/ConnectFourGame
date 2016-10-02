@@ -22,6 +22,8 @@ import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -29,10 +31,14 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+import com.convension.connectfour.Connect4App;
 import com.convension.connectfour.R;
 import com.convension.connectfour.inter.IGameViewListener;
+import com.convension.connectfour.utils.ConnectivityReceiver;
+import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.games.Games;
@@ -50,7 +56,7 @@ import com.google.android.gms.games.multiplayer.realtime.RoomStatusUpdateListene
 import com.google.android.gms.games.multiplayer.realtime.RoomUpdateListener;
 
 import com.google.example.games.basegameutils.BaseGameUtils;
-import com.jgrindall.android.connect4.lib.board.Players;
+import com.convension.connectfour.board.Players;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -79,7 +85,7 @@ import java.util.Set;
  * @author Bruno Oliveira (btco), 2013-04-26
  */
 public class Connect4MultiplayerActivity extends ABaseActivity
-    implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
+    implements  ConnectivityReceiver.ConnectivityReceiverListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
     View.OnClickListener, RealTimeMessageReceivedListener,
     RoomStatusUpdateListener, RoomUpdateListener, OnInvitationReceivedListener, IGameViewListener {
 
@@ -89,6 +95,7 @@ public class Connect4MultiplayerActivity extends ABaseActivity
      */
 
     final static String TAG = "Connect4Multiplayer";
+    public static int COLNUM=-1;
 
     // Request codes for the UIs that we show with startActivityForResult:
     final static int RC_SELECT_PLAYERS = 10000;
@@ -132,7 +139,12 @@ public class Connect4MultiplayerActivity extends ABaseActivity
     // Message buffer for sending messages
     byte[] mMsgBuf = new byte[2];
     public AdView mAdView;
+    private Handler mHandler;       // Handler to display the ad on the UI thread
+    private Runnable displayAd;     // Code to execute to perform this operation
 
+    //ads code
+
+    InterstitialAd mInterstitialAd;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -145,27 +157,61 @@ public class Connect4MultiplayerActivity extends ABaseActivity
         .addOnConnectionFailedListener(this)
         .addApi(Games.API).addScope(Games.SCOPE_GAMES)
         .build();
+
+        //ads code
+
         mAdView = (AdView ) findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().
                 addTestDevice(AdRequest.DEVICE_ID_EMULATOR).build ();
         mAdView.loadAd(adRequest);
+        mHandler = new Handler(Looper.getMainLooper());
+        mInterstitialAd = new InterstitialAd(this);
+        mInterstitialAd.setAdUnitId(getString (R.string.banner_ad_unit_id_multiplayer_main_Page));
+       // mInterstitialAd.loadAd(adRequest);
+
+        displayAd = new Runnable() {
+            public void run() {
+                runOnUiThread(new Runnable() {
+                    public void run() {
+
+                        if (mInterstitialAd.isLoaded()) {
+                            mInterstitialAd.show();
+                        }
+                        else {
+                            InviteOrSwitchToMainScreen();
+                        }
+                    }
+                });
+            }
+        };
+        mInterstitialAd.setAdListener(new AdListener () {
+            @Override
+            public void onAdClosed() {
+                requestNewInterstitial();
+                InviteOrSwitchToMainScreen();
+               // startQuickGame();
+            }
+        });
+        requestNewInterstitial();
+
 
     // set up a click listener for everything we care about
     for (int id : CLICKABLES) {
       findViewById(id).setOnClickListener(this);
     }
   }
+    private void requestNewInterstitial() {
+        AdRequest adRequest = new AdRequest.Builder()
+                .addTestDevice("ED45C17BE9C85526F9DDC2DF5C1E3DEE")
+                .build();
+
+        mInterstitialAd.loadAd(adRequest);
+    }
 
   @Override
   public void onClick(View v) {
     Intent intent;
         switch (v.getId()) {
-           /* case R.id.button_single_player:
-            case R.id.button_single_player_2:
-                // play a single-player game
-                resetGameVars();
-                startGame(false);
-                break;*/
             case R.id.button_sign_in:
                 // user wants to sign in
                 // Check to see the developer who's running this sample code read the instructions :-)
@@ -209,12 +255,9 @@ public class Connect4MultiplayerActivity extends ABaseActivity
                 break;
             case R.id.button_quick_game:
                 // user wants to play against a random opponent right now
-                startQuickGame();
+                    startQuickGame();
+                //}
                 break;
-           /* case R.id.button_click_me:
-                // (gameplay) user clicked the "click me" button
-                scoreOnePoint();
-                break;*/
         }
     }
 
@@ -804,9 +847,11 @@ public class Connect4MultiplayerActivity extends ABaseActivity
                 continue;
             if (p.getStatus() != Participant.STATUS_JOINED)
                 continue;
+            if(p.isConnectedToRoom ())
                 // final score notification must be sent via reliable message
-                Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, mMsgBuf,
-                        mRoomId, p.getParticipantId());
+                if(mRoomId!=null && mGoogleApiClient!=null )
+                    Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, mMsgBuf,
+                            mRoomId, p.getParticipantId());
         }
     }
 
@@ -902,31 +947,51 @@ public class Connect4MultiplayerActivity extends ABaseActivity
     @Override
     public void onRealTimeMessageSend (int colNum,Boolean isFinal) {
         if(isFinal) {
-            if(colNum==0) {
-                switchToMainScreen ();
-                View view=findViewById (R.id.button_invite_players);
-                this.onClick (view);
-                Players.resetAllSettings ();
-            }else{
-                switchToMainScreen ();
-                Players.resetAllSettings ();
-            }
+                 COLNUM=colNum;
+                 displayInterstitial();
+        //}
         }else {
             broadcastScore (colNum, isFinal);
         }
     }
+    public void displayInterstitial() {
+        mHandler.postDelayed(displayAd, 1);
+    }
+    public void InviteOrSwitchToMainScreen()
+    {
+        if ( COLNUM == 0 ) {
+            switchToMainScreen ();
+            View view = findViewById (R.id.button_invite_players);
+            this.onClick (view);
+            Players.resetAllSettings ();
+            COLNUM=-1;
+        } else {
+            switchToMainScreen ();
+            Players.resetAllSettings ();
+        }
+    }
+
     /**checks is this user is the alphabetically smallest participant id.
      * if so then the user is server.
      * @return if this user should be the server.
      */
     private boolean isServer()
     {
-        for(Participant p : mParticipants )
-        {
-            if(p.getParticipantId().compareTo (mMyId)<0)
-                return false;
+        for ( int i=0;i< mParticipants.size ();i++ ) {
+            if(mParticipants.get(i).getParticipantId().equals(mMyId)){
+                Players.INDEX=i;
+            }
         }
-        return true;
+        if(Players.INDEX==0) {
+            Players.OPPONNENT_INDEX=1;
+        }else{
+            Players.OPPONNENT_INDEX=0;
+        }
+        String mOpponentId=mParticipants.get (Players.OPPONNENT_INDEX).getParticipantId ();
+        String mMyId=mParticipants.get (Players.INDEX).getParticipantId ();
+        if(mMyId.compareTo (mOpponentId)>0)
+                   return true;
+        return false;
     }
     private void setParticipantsName() {
         Players.IS_SERVER = false;
@@ -936,25 +1001,36 @@ public class Connect4MultiplayerActivity extends ABaseActivity
             }else{
                 Players.IS_SERVER = false;
             }
-        for ( int i=0;i< mParticipants.size ();i++ ) {
-           if(mParticipants.get(i).getParticipantId().equals(mMyId)){
-               Players.INDEX=i;
-           }
-        }
-        for ( int i=0;i< mParticipants.size ();i++ ) {
-            if(!Players.IS_SERVER && Players.INDEX==i ){
-                Players.SECOND_PLAYER=mParticipants.get (i).getDisplayName ();
+        String mOpponentName=mParticipants.get (Players.OPPONNENT_INDEX).getDisplayName ();
+        String mMyName=mParticipants.get (Players.INDEX).getDisplayName ();
+            if(Players.IS_SERVER  ) {
+                Players.SECOND_PLAYER = mOpponentName;
+                Players.FIRST_PLAYER = mMyName;
+            }else {
+                Players.SECOND_PLAYER = mMyName;
+                Players.FIRST_PLAYER = mOpponentName;
             }
-            if(Players.IS_SERVER && Players.INDEX==i  )  {
-                Players.FIRST_PLAYER=mParticipants.get (i).getDisplayName ();
-            }
-            if( !Players.IS_SERVER && !(Players.INDEX==i)){
-                Players.FIRST_PLAYER=mParticipants.get (i).getDisplayName ();
-            }
-            if(Players.IS_SERVER && !(Players.INDEX==i)){
-                Players.SECOND_PLAYER=mParticipants.get (i).getDisplayName ();
-            }
-        }
 
+    }
+
+    @Override
+    public void onNetworkConnectionChanged (boolean isConnected) {
+        if(isConnected) {
+            Snackbar snackbar = Snackbar.make (findViewById (R.id.root_view), "Connection Successf! Enjoy playing game.", Snackbar.LENGTH_LONG);
+           // snackbar.col (Color.BLUE);
+            snackbar.show ();
+        }else
+        {
+            Snackbar snackbar = Snackbar.make (findViewById (R.id.root_view), "Connection Failed! Connect to internet.", Snackbar.LENGTH_LONG);
+           // snackbar.setActionTextColor (Color.RED);
+            snackbar.show ();
+        }
+    }
+    public void onResume(){
+        super.onResume();
+       // this.debug("RESUMING");
+        Connect4App.getInstance().setConnectivityListener(this);
+        // reload the UI and play the move.
+       // reload();
     }
 }

@@ -4,7 +4,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import com.convension.connectfour.R;
 import com.convension.connectfour.inter.*;
-import com.jgrindall.android.connect4.lib.board.*;
+import com.convension.connectfour.board.*;
 import android.graphics.drawable.AnimationDrawable;
 import android.content.Context;
 import android.os.Handler;

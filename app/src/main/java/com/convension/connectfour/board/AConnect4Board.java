@@ -1,8 +1,8 @@
-package com.jgrindall.android.connect4.lib.board;
+package com.convension.connectfour.board;
 
-import com.jgrindall.android.connect4.lib.algorithm.AAlgorithm;
-import com.jgrindall.android.connect4.lib.algorithm.AlgorithmConsts;
-import com.jgrindall.android.connect4.lib.algorithm.LookUp;
+import com.convension.connectfour.algorithm.AAlgorithm;
+import com.convension.connectfour.algorithm.AlgorithmConsts;
+import com.convension.connectfour.algorithm.LookUp;
 import java.util.Arrays;
 
 public abstract class AConnect4Board

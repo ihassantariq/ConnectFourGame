@@ -1,6 +1,6 @@
 package com.convension.connectfour.utils;
 
-import com.jgrindall.android.connect4.lib.board.*;
+import com.convension.connectfour.board.*;
 
 public class GameBoard{
 	

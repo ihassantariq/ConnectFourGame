@@ -9,7 +9,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import  com.convension.connectfour.inter.*;
-import com.jgrindall.android.connect4.lib.board.*;
+import com.convension.connectfour.board.*;
 import android.content.res.Resources;
 import android.graphics.*;
 import android.media.MediaPlayer;

@@ -1,4 +1,4 @@
-package com.jgrindall.android.connect4.lib.algorithm;
+package com.convension.connectfour.algorithm;
 
 import java.lang.reflect.Field;
 

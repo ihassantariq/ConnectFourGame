@@ -5,13 +5,12 @@ import java.util.*;
 import  com.convension.connectfour.Connect4App;
 import  com.convension.connectfour.R;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 
 import  com.convension.connectfour.inter.*;
-import com.jgrindall.android.connect4.lib.board.*;
+import com.convension.connectfour.board.*;
 import android.content.res.Resources;
 import android.graphics.*;
 import android.media.MediaPlayer;
@@ -257,7 +256,7 @@ public class GameViewMultiplayer extends FrameLayout implements View.OnTouchList
         if(wonPlayed!=null && wonOther!=null){
             // both win (using powerball)
             whoWon = Players.POWER_PLAYER;
-            drawTwoWinLines(wonPlayed, wonOther);
+        //    drawTwoWinLines(wonPlayed, wonOther);
             board.alternateTurn();
             return;
         }
@@ -323,9 +322,9 @@ public class GameViewMultiplayer extends FrameLayout implements View.OnTouchList
             }
             else if(whoWon==Players.PLAYER2){
                 if(Players.IS_SERVER) {
-                    s = "Congrats, you" +" won!";
-                }else{
                     s = "Sorry, you" +" lost!";
+                }else{
+                    s = "Congrats, you" +" won!";
                 }
             }
             else{
@@ -355,22 +354,22 @@ public class GameViewMultiplayer extends FrameLayout implements View.OnTouchList
         }
         return out;
     }
-    private void drawTwoWinLines(APoint[] won0, APoint[] won1){
-        if(whoWon==Players.PLAYER1){
-            playSuccessSound();
-        }
-        else{
-            playFailSound();
-        }
-        APoint[][] line = {{won0[0], won1[0]}, {won0[1], won1[1]}, {won0[2], won1[2]}, {won0[3], won1[3]}};
-        winLinesFrame.draw(convertToXY(line));
-    }
     private void drawOneWinLine(APoint[] won){
+
         if(whoWon==Players.PLAYER1){
-            playSuccessSound();
+            if(Players.IS_SERVER) {
+                playSuccessSound();
+            }else{
+                playFailSound();
+            }
+
         }
-        else{
-            playFailSound();
+        else if(whoWon==Players.PLAYER2){
+            if(Players.IS_SERVER) {
+                playFailSound();
+            }else{
+                playSuccessSound();
+            }
         }
         APoint[][] line = {{won[0]}, {won[1]}, {won[2]}, {won[3]}};
         winLinesFrame.draw(convertToXY(line));
@@ -450,7 +449,7 @@ public class GameViewMultiplayer extends FrameLayout implements View.OnTouchList
             public void onClick(View v) {
                 //newGame();
           //      enableBottomButtons(true);
-                mTimer.cancel();
+           //     mTimer.cancel();
                 mMessageSendListener.onRealTimeMessageSend (0,true);
                 dialog.dismiss();
             }
@@ -461,7 +460,7 @@ public class GameViewMultiplayer extends FrameLayout implements View.OnTouchList
         quite.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                mTimer.cancel();
+             //   mTimer.cancel();
                 mMessageSendListener.onRealTimeMessageSend (1,true);
 
                 dialog.dismiss();

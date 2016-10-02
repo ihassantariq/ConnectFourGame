@@ -1,4 +1,4 @@
-package com.jgrindall.android.connect4.lib.board;
+package com.convension.connectfour.board;
 
 import java.util.Comparator;
 

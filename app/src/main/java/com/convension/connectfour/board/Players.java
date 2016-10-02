@@ -1,10 +1,11 @@
-package com.jgrindall.android.connect4.lib.board;
+package com.convension.connectfour.board;
 
 public class Players
 {
   public static final int NONE = 0;
   public static final int PLAYER1 = 1;
   public static  int INDEX=  -1;
+  public static  int OPPONNENT_INDEX=  -1;
   public static final int PLAYER2 = -1;
   public static final int POWER_PLAYER = 2;
   public static final int ONE_PLAYER = 0;
@@ -25,6 +26,7 @@ public class Players
   public static final int THEME_DEFAULT=1;
   public static void resetAllSettings(){
     INDEX=  -1;
+    OPPONNENT_INDEX=  -1;
     FIRST_PLAYER="Player 1";
     SECOND_PLAYER="Player 2";
     IS_SERVER=false;

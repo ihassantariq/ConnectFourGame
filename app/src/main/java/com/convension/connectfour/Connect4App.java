@@ -1,11 +1,9 @@
 package com.convension.connectfour;
 
 import android.app.Application;
-import android.content.SharedPreferences;
 
 import com.convension.connectfour.utils.ConnectivityReceiver;
 import com.google.android.gms.ads.MobileAds;
-import com.jgrindall.android.connect4.lib.board.Players;
 
 public class Connect4App extends Application{
 	

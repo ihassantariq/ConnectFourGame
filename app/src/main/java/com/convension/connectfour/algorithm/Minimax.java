@@ -1,7 +1,7 @@
-package com.jgrindall.android.connect4.lib.algorithm;
+package com.convension.connectfour.algorithm;
 
-import com.jgrindall.android.connect4.lib.board.APoint;
-import com.jgrindall.android.connect4.lib.board.IBoard;
+import com.convension.connectfour.board.APoint;
+import com.convension.connectfour.board.IBoard;
 
 public class Minimax
   extends AAlgorithm

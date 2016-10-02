@@ -2,12 +2,11 @@ package com.convension.connectfour.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.view.View;
 import android.widget.ImageView;
 
 import com.convension.connectfour.Connect4App;
 import com.convension.connectfour.R;
-import com.jgrindall.android.connect4.lib.board.Players;
+import com.convension.connectfour.board.Players;
 
 /**
  * Created by umerfarooq on 11/08/2016.
