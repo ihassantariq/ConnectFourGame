@@ -4,10 +4,10 @@
     	 <shape>
     	 <size android:width="36dp" android:height="36dp"/>
             <solid
-                android:color="#01a4cf" />
+                android:color="@color/wood_medlight" />
             <stroke
                 android:width="1dp"
-                android:color="#37707e" />
+                android:color="@color/wood_medlight" />
             <corners
                 android:radius="3dp" />
           
@@ -19,10 +19,10 @@
      	<shape>
             <size android:width="10dp" android:height="10dp"/>
             <solid
-                android:color="#fff" />
+                android:color="@color/wood_dark" />
             <stroke
                 android:width="1dp"
-                android:color="#ddd" />
+                android:color="@color/wood_dark" />
             <corners
                 android:radius="3dp" />
         

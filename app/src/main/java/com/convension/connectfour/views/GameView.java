@@ -410,7 +410,7 @@ public class GameView extends FrameLayout implements View.OnTouchListener, IOnUn
         dialog.setContentView(R.layout.gameover);
         TextView tV = (TextView)dialog.findViewById(R.id.gameover_msg);
         tV.setText(s);
-        dialog.setCancelable(true);
+        dialog.setCancelable(false);
         final GameView gV = this;
         Button undoButton = (Button) dialog.findViewById(R.id.over_undo);
         ((Button) dialog.findViewById(R.id.over_restart)).setOnClickListener(new OnClickListener() {

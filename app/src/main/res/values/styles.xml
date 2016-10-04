@@ -59,7 +59,7 @@
     
     
     <style name="MyDialog" parent="@android:style/Theme.Dialog">
-        <item name="android:background">#034F70</item>
+        <item name="android:background">@color/wood_dark</item>
          <item name="android:layout_width">wrap_content</item>
          <item name="android:layout_height">wrap_content</item>
          <item name="android:padding">4dp</item>
@@ -170,7 +170,7 @@
 	<style name="Blurb">
 		<item name="android:layout_width">wrap_content</item>
 		<item name="android:layout_height">wrap_content</item>
-		<item name="android:textColor">@color/BlurbColor</item>
+		<item name="android:textColor">@color/wood_meddark</item>
 	</style>
 
 	<style name="GameBlurb" parent="@style/Blurb">

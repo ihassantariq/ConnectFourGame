@@ -4,7 +4,7 @@
 	<color name="wood_dark">#502D17</color>
 	<color name="wood_medlight">#926B3D</color>
 	<color name="wood_meddark">#6A4626</color>
-	<color name="link">#0099FF</color>
+	<color name="link">#000000</color>
 	<color name="black">#000000</color>
 	<color name="white">#FFFFFF</color>
 </resources>
