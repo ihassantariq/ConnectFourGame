@@ -161,8 +161,9 @@ public class Connect4MultiplayerActivity extends ABaseActivity
         //ads code
 
         mAdView = (AdView ) findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder().
-                addTestDevice(AdRequest.DEVICE_ID_EMULATOR).build ();
+        AdRequest adRequest = new AdRequest.Builder()
+                //.addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                .build ();
         mAdView.loadAd(adRequest);
         mHandler = new Handler(Looper.getMainLooper());
         mInterstitialAd = new InterstitialAd(this);
@@ -202,7 +203,7 @@ public class Connect4MultiplayerActivity extends ABaseActivity
   }
     private void requestNewInterstitial() {
         AdRequest adRequest = new AdRequest.Builder()
-                .addTestDevice("ED45C17BE9C85526F9DDC2DF5C1E3DEE")
+               // .addTestDevice("ED45C17BE9C85526F9DDC2DF5C1E3DEE")
                 .build();
 
         mInterstitialAd.loadAd(adRequest);
