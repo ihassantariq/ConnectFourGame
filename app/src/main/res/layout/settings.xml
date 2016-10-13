@@ -1,57 +1,276 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-
-<FrameLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout
 	android:layout_width="fill_parent"
-	android:layout_height="fill_parent">
+	android:layout_height="match_parent" xmlns:android="http://schemas.android.com/apk/res/android">
 <ImageView 
 		android:src="@drawable/wood"
 		android:layout_width="fill_parent"
 		android:layout_height="fill_parent"
 		android:scaleType="fitXY"/>
-	
-	 <com.convension.connectfour.views.DecorView
+	<com.convension.connectfour.views.DecorView
 			android:layout_width="fill_parent"
 			android:layout_height="fill_parent"/>
 		 <View 
 		    android:background="@drawable/dark_rectangle" 
 		    android:layout_width="fill_parent" 
-		    android:layout_height="fill_parent">
+		    android:layout_height="match_parent">
 		</View>
 		 
 	
 	<RelativeLayout
 	 android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-   android:gravity="center"
-    android:layout_gravity="center"
-	android:padding="10dp"
-	>
+    android:layout_height="wrap_content"
+   android:gravity="center_horizontal"
+    android:layout_gravity="center_horizontal"
+	android:padding="10dp">
 
 
 <LinearLayout
     android:orientation="vertical"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-   android:gravity="center"
+    android:layout_height="wrap_content"
+   	android:gravity="center"
     android:layout_gravity="center"
     android:layout_centerInParent="true"
-    android:padding="20dp"
-    >
+    android:padding="20dp">
 
-		
-	
+
+	<LinearLayout android:orientation="vertical"
+				  android:layout_width="fill_parent"
+				  android:layout_gravity="center"
+				  android:gravity="center"
+				  android:layout_height="wrap_content"
+				  android:layout_weight="2"
+
+	>
+
+		<View
+			android:layout_height="1dp"
+			android:layout_width="match_parent"
+			android:background="@color/wood_meddark"
+			android:layout_margin="10dp"
+			style="@style/Blurb"/>
+		<TextView
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:text="@string/msg_players"
+			android:gravity="center"
+			android:textSize="16sp"
+			style="@style/Blurb"/>
+
+		<View
+			android:layout_height="1dp"
+			android:layout_width="match_parent"
+			android:background="@color/wood_meddark"
+			android:layout_margin="10dp"
+			style="@style/Blurb"/>
+		<LinearLayout android:orientation="horizontal"
+					  android:layout_width="fill_parent"
+					  android:layout_height="wrap_content"
+					  android:gravity="center"
+
+
+		>
+
+
+
+
+			<RadioGroup
+				android:id="@+id/radio_play"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:paddingBottom="1dp"
+				android:paddingRight="10dp"
+			>
+
+				<RadioButton
+					android:id="@+id/radio_play0"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					style="@style/MyRadio"
+					android:text="1 player"
+					android:checked="true" />
+
+				<RadioButton
+					android:id="@+id/radio_play1"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					style="@style/MyRadio"
+					android:text="2 player" />
+
+
+
+			</RadioGroup>
+
+
+
+
+			<RadioGroup
+				android:id="@+id/radio_turn"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:paddingBottom="2dp"
+
+
+			>
+
+				<RadioButton
+					android:id="@+id/radio_turn0"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					style="@style/MyRadio"
+					android:text="Go first"
+					android:checked="true" />
+
+				<RadioButton
+					android:id="@+id/radio_turn1"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					style="@style/MyRadio"
+					android:text="Go second" />
+
+
+
+			</RadioGroup>
+
+
+		</LinearLayout>
+
+
+	</LinearLayout>
+
+
+
+
+
+	<LinearLayout android:orientation="vertical"
+				  android:layout_width="fill_parent"
+				  android:layout_gravity="center"
+				  android:gravity="center"
+				  android:layout_marginTop="10dp"
+				  android:layout_height="wrap_content"
+				  android:layout_weight="2"
+	>
+
+		<View
+			android:layout_height="1dp"
+			android:layout_width="match_parent"
+			android:background="@color/wood_meddark"
+			android:layout_margin="10dp"
+			style="@style/Blurb"/>
+
+		<TextView
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:text="@string/msg_diff"
+			android:gravity="center"
+			android:layout_gravity="center"
+			android:textSize="16sp"
+			style="@style/Blurb"
+
+		/>
+		<View
+			android:layout_height="1dp"
+			android:layout_width="match_parent"
+			android:background="@color/wood_meddark"
+			android:layout_margin="10dp"
+			style="@style/Blurb"/>
+
+		<LinearLayout android:orientation="horizontal"
+					  android:layout_width="fill_parent"
+					  android:layout_height="wrap_content"
+					  android:gravity="center"
+
+
+		>
+
+
+
+			<RadioGroup
+				android:id="@+id/radio_diff"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:paddingLeft="10dp"
+
+			>
+
+				<RadioButton
+					android:id="@+id/radio_diff0"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="easy"
+					style="@style/MyRadio"
+					android:checked="true" />
+
+				<RadioButton
+					android:id="@+id/radio_diff1"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					style="@style/MyRadio"
+					android:text="medium" />
+
+				<RadioButton
+					android:id="@+id/radio_diff2"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					style="@style/MyRadio"
+					android:text="hard" />
+
+			</RadioGroup>
+
+			<RadioGroup
+				android:paddingLeft="5dp"
+				android:id="@+id/radio_power"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_gravity="center"
+				android:paddingTop="10dp"
+			>
+
+				<RadioButton
+					android:id="@+id/radio_power0"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					style="@style/MyRadio"
+					android:text="Powerball on"
+					android:checked="true" />
+
+				<RadioButton
+					android:id="@+id/radio_power1"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					style="@style/MyRadio"
+					android:text="Powerball off" />
+
+
+
+			</RadioGroup>
+
+		</LinearLayout>
+
+
+	</LinearLayout>
+	<View
+		android:layout_height="1dp"
+		android:layout_width="match_parent"
+		android:background="@color/wood_meddark"
+		android:layout_margin="10dp"
+		style="@style/Blurb"/>
 	<TextView 
 		android:layout_width="fill_parent" 
 		android:layout_height="wrap_content"
-		style="@style/LabelText"
+		style="@style/Blurb"
+		android:textSize="16sp"
 		android:text="@string/msg_sound"
-		android:gravity="center"
-    android:layout_gravity="center"
-    android:paddingBottom="30dp"
-    
-		/>
-			
+		android:gravity="center_horizontal|center_vertical"
+		android:layout_gravity="center_horizontal|center_vertical"
+	/>
+	<View
+		android:layout_height="1dp"
+		android:layout_width="match_parent"
+		android:background="@color/wood_meddark"
+		android:layout_margin="10dp"
+		style="@style/Blurb"/>
 	 <RadioGroup
 	        android:id="@+id/radio_sound"
 	        android:layout_width="wrap_content"
@@ -73,9 +292,7 @@
 	            android:layout_height="wrap_content"
 	             style="@style/MyRadio"
 	            android:text="Sound off" />
-	            
-	           
-	 
+
 	    </RadioGroup>
 	    
 	    
@@ -93,10 +310,7 @@
     android:orientation="vertical"
     android:layout_width="wrap_content"
     android:layout_height="fill_parent"
-    android:layout_gravity="right"
-   
-    
-    >
+    android:layout_gravity="right">
 	 
 	 <LinearLayout
     android:orientation="horizontal"
@@ -129,4 +343,3 @@
 
 
 </FrameLayout>
-

@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Connect 4 Power</string>
+    <string name="app_name">Four In a Row on Play Games</string>
     <string name="msg_youwin">Well done, you win !</string>
     <string name="msg_p1win">Player 1 has won !</string>
     <string name="msg_p2win">Player 2 has won !</string>
     <string name="msg_youlose">Sorry, you have lost !</string>
     <string name="msg_draw">Uh oh, it\'s a draw!</string>
-    <string name="msg_players">Choose your game</string>
-    <string name="msg_diff">Choose your options</string>
-    <string name="msg_sound">Settings</string>
+    <string name="msg_players">Player Preferences</string>
+    <string name="msg_diff">Game Options</string>
+    <string name="msg_sound">Sound</string>
     <string name="msg_help">Help</string>
     <string name="sureleave">Are you sure you want to quit this game?</string>
     <string name="surerestart">Are you sure you want to restart the game?</string>
